@@ -4,42 +4,96 @@ import './index.css'
 
 function App() {
   const [properties, setProperties] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const [filters, setFilters] = useState({
+    search: '',
+    location: '',
+    property_type: '',
+    listing_type: '',
+    sort: 'default'
+  })
+
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/properties')
-      .then(response => {
+    const controller = new AbortController()
+
+    async function loadProperties() {
+      setLoading(true)
+      setError('')
+
+      const params = new URLSearchParams()
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && value !== 'default') {
+          params.set(key, value)
+        }
+      })
+
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/properties?${params}`,
+          { signal: controller.signal }
+        )
+
         if (!response.ok) {
           throw new Error('Unable to load properties')
         }
-        return response.json()
-      })
-      .then(data => {
+
+        const data = await response.json()
         setProperties(data)
-        setLoading(false)
-      })
-      .catch(() => {
-        setError('Could not connect to the property database.')
-        setLoading(false)
-      })
-  }, [])
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          setError('Could not load properties. Check your backend.')
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadProperties()
+
+    return () => controller.abort()
+  }, [filters])
+
+  const updateFilter = (key, value) => {
+    setFilters(previous => ({
+      ...previous,
+      [key]: value
+    }))
+  }
+
+  const resetFilters = () => {
+    setFilters({
+      search: '',
+      location: '',
+      property_type: '',
+      listing_type: '',
+      sort: 'default'
+    })
+  }
 
   const formatPrice = (price, listingType) => {
-    const formatted = new Intl.NumberFormat('en-AE').format(price)
-    return `AED ${formatted}${listingType === 'Rent' ? ' / year' : ''}`
+    const amount = new Intl.NumberFormat('en-AE').format(price)
+    return `AED ${amount}${listingType === 'Rent' ? ' / year' : ''}`
   }
 
   return (
     <div className="app">
       <header className="navbar">
         <div className="logo">Prop<span>Nexa</span></div>
+
         <nav>
           <a href="#home">Home</a>
           <a href="#properties">Properties</a>
           <a href="#about">About</a>
         </nav>
-        <button className="contact-btn">Contact Us</button>
+
+        <a href="mailto:hello@propnexa.com" className="contact-btn">
+          Contact Us
+        </a>
       </header>
 
       <section className="hero" id="home">
@@ -60,20 +114,72 @@ function App() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">EXPLORE YOUR OPTIONS</p>
-            <h2>Featured Properties</h2>
-            <p>Discover homes across the UAE.</p>
+            <h2>Find Your Property</h2>
+            <p>Search and discover homes across the UAE.</p>
           </div>
-          <span className="listing-count">
-            {properties.length} Listings
-          </span>
         </div>
 
-        {loading && <p className="message">Loading properties...</p>}
+        <section className="filter-panel">
+          <input
+            type="search"
+            placeholder="Search property or community..."
+            value={filters.search}
+            onChange={e => updateFilter('search', e.target.value)}
+          />
 
+          <select
+            value={filters.location}
+            onChange={e => updateFilter('location', e.target.value)}
+          >
+            <option value="">All Cities</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+            <option value="Sharjah">Sharjah</option>
+          </select>
+
+          <select
+            value={filters.property_type}
+            onChange={e => updateFilter('property_type', e.target.value)}
+          >
+            <option value="">All Property Types</option>
+            <option value="Apartment">Apartment</option>
+            <option value="Villa">Villa</option>
+            <option value="Townhouse">Townhouse</option>
+          </select>
+
+          <select
+            value={filters.listing_type}
+            onChange={e => updateFilter('listing_type', e.target.value)}
+          >
+            <option value="">Buy or Rent</option>
+            <option value="Sale">Buy</option>
+            <option value="Rent">Rent</option>
+          </select>
+
+          <select
+            value={filters.sort}
+            onChange={e => updateFilter('sort', e.target.value)}
+          >
+            <option value="default">Sort By</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+          </select>
+
+          <button className="reset-btn" onClick={resetFilters}>
+            Reset
+          </button>
+        </section>
+
+        <div className="results-heading">
+          <h3>Available Properties</h3>
+          <span>{properties.length} results</span>
+        </div>
+
+        {loading && <p className="message">Finding properties...</p>}
         {error && <p className="error">{error}</p>}
 
         {!loading && !error && properties.length === 0 && (
-          <p className="message">No properties available yet.</p>
+          <p className="message">No matching properties found.</p>
         )}
 
         <div className="property-grid">
