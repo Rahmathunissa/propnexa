@@ -604,3 +604,72 @@ footer p {
     grid-template-columns: 1fr;
   }
 }
+
+.smart-match-page {
+  max-width: 1150px;
+  margin: 45px auto;
+  padding: 0 25px;
+  min-height: 70vh;
+}
+
+.smart-match-heading {
+  margin: 30px 0;
+}
+
+.smart-match-heading h1 {
+  color: #183153;
+  font-size: 36px;
+}
+
+.match-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 28px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(24,49,83,.08);
+}
+
+.match-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #183153;
+  font-weight: 600;
+}
+
+.match-form input,
+.match-form select {
+  padding: 13px;
+  border: 1px solid #dce3eb;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.match-submit {
+  grid-column: 1 / -1;
+  padding: 14px;
+  background: #159e9a;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.match-results {
+  margin-top: 45px;
+}
+
+.match-results h2 {
+  color: #183153;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 650px) {
+  .match-form {
+    grid-template-columns: 1fr;
+  }
+}
+

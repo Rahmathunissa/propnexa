@@ -5,6 +5,8 @@ import { Link, Routes, Route } from 'react-router-dom'
 import PropertyDetails from './pages/PropertyDetails.jsx'
 import Favourites from './pages/Favourites.jsx'
 import CompareProperties from './pages/CompareProperties.jsx'
+import SmartMatch from './pages/SmartMatch.jsx'
+
 
 function Home({
   favourites,
@@ -103,6 +105,7 @@ function Home({
   <Link to="/favourites">
     Favourites ({favourites.length})
   </Link>
+  <Link to="/smart-match">Smart Match</Link>
   <a href="#about">About</a>
 </nav>
 
@@ -250,6 +253,7 @@ function Home({
 >
   View Details
 </Link>
+
 <button
   className="compare-btn"
   onClick={() => toggleCompare(property.id)}
@@ -353,6 +357,7 @@ const toggleCompare = (propertyId) => {
         path="/favourites"
         element={<Favourites favourites={favourites} toggleFavourite={toggleFavourite} />}
       />
+      <Route path="/smart-match" element={<SmartMatch />} />
     </Routes>
   )
 }
