@@ -4,9 +4,14 @@ import './index.css'
 import { Link, Routes, Route } from 'react-router-dom'
 import PropertyDetails from './pages/PropertyDetails.jsx'
 import Favourites from './pages/Favourites.jsx'
+import CompareProperties from './pages/CompareProperties.jsx'
 
-
-function Home({ favourites, toggleFavourite }) {
+function Home({
+  favourites,
+  toggleFavourite,
+  compareIds,
+  toggleCompare
+}) {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -92,6 +97,9 @@ function Home({ favourites, toggleFavourite }) {
         <nav>
   <a href="#home">Home</a>
   <a href="#properties">Properties</a>
+  <Link to="/compare">
+  Compare ({compareIds.length})
+</Link>
   <Link to="/favourites">
     Favourites ({favourites.length})
   </Link>
@@ -242,6 +250,14 @@ function Home({ favourites, toggleFavourite }) {
 >
   View Details
 </Link>
+<button
+  className="compare-btn"
+  onClick={() => toggleCompare(property.id)}
+>
+  {compareIds.includes(property.id)
+    ? 'Remove from Compare'
+    : 'Add to Compare'}
+</button>
               </div>
             </article>
           ))}
@@ -262,6 +278,32 @@ function App() {
     return JSON.parse(localStorage.getItem('propnexa-favourites') || '[]')
   })
 
+  const [compareIds, setCompareIds] = useState(() => {
+  return JSON.parse(localStorage.getItem('propnexa-compare') || '[]')
+})
+useEffect(() => {
+  localStorage.setItem(
+    'propnexa-compare',
+    JSON.stringify(compareIds)
+  )
+}, [compareIds])
+
+const toggleCompare = (propertyId) => {
+  setCompareIds(previous => {
+    if (previous.includes(propertyId)) {
+      return previous.filter(id => id !== propertyId)
+    }
+
+    if (previous.length >= 3) {
+      alert('You can compare a maximum of 3 properties.')
+      return previous
+    }
+
+    return [...previous, propertyId]
+  })
+}
+
+
   useEffect(() => {
     localStorage.setItem(
       'propnexa-favourites',
@@ -281,13 +323,24 @@ function App() {
 
   return (
     <Routes>
+        <Route
+  path="/compare"
+  element={
+    <CompareProperties
+      compareIds={compareIds}
+      toggleCompare={toggleCompare}
+    />
+  }
+/>
       <Route
         path="/"
         element={
           <Home
-            favourites={favourites}
-            toggleFavourite={toggleFavourite}
-          />
+  favourites={favourites}
+  toggleFavourite={toggleFavourite}
+  compareIds={compareIds}
+  toggleCompare={toggleCompare}
+/>
         }
       />
 
