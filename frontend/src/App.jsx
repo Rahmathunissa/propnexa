@@ -7,7 +7,7 @@ import Favourites from './pages/Favourites.jsx'
 import CompareProperties from './pages/CompareProperties.jsx'
 import SmartMatch from './pages/SmartMatch.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
-
+import Contact from './pages/Contact.jsx'
 
 function Home({
   favourites,
@@ -110,7 +110,7 @@ function Home({
   <a href="#about">About</a>
 </nav>
 
-        <a href="mailto:hello@propnexa.com" className="contact-btn">
+        <a href="/contact" className="contact-btn">
           Contact Us
         </a>
       </header>
@@ -329,6 +329,7 @@ const toggleCompare = (propertyId) => {
   return (
     <Routes>
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
   path="/compare"
   element={

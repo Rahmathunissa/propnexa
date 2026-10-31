@@ -7,8 +7,17 @@ from config import Config
 from extensions import db
 from models.property import Property
 
+
+from flask_jwt_extended import (
+    JWTManager,
+    create_access_token,
+    jwt_required
+)
+from werkzeug.security import check_password_hash
+
 app = Flask(__name__)
 app.config.from_object(Config)
+jwt = JWTManager(app)
 
 CORS(
     app,
