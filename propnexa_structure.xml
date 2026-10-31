@@ -1,0 +1,28 @@
+
+<folder name="propnexa">
+    <folder name="frontend">
+        <folder name="public" />
+        <folder name="src">
+            <folder name="components" />
+            <folder name="pages" />
+            <folder name="assets" />
+            <file name="App.jsx" />
+            <file name="main.jsx" />
+        </folder>
+        <file name="package.json" />
+        <file name="vite.config.js" />
+        <file name="index.html" />
+    </folder>
+
+    <folder name="backend">
+        <folder name="models" />
+        <folder name="routes" />
+        <folder name="instance" />
+        <file name="app.py" />
+        <file name="config.py" />
+        <file name="requirements.txt" />
+    </folder>
+
+    <file name="README.md" />
+    <file name=".gitignore" />
+</folder>
