@@ -673,3 +673,153 @@ footer p {
   }
 }
 
+
+.admin-page {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 25px 60px;
+}
+
+.admin-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+  gap: 20px;
+}
+
+.admin-heading h1 {
+  color: #183153;
+  font-size: 34px;
+}
+
+.admin-stat {
+  background: #183153;
+  color: white;
+  padding: 22px 30px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-stat strong {
+  font-size: 30px;
+}
+
+.admin-form-section,
+.admin-list-section {
+  background: white;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(24,49,83,.07);
+}
+
+.admin-form-section h2,
+.admin-list-section h2 {
+  color: #183153;
+  margin-bottom: 22px;
+}
+
+.admin-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-weight: 600;
+  color: #183153;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  padding: 12px;
+  border: 1px solid #dce3eb;
+  border-radius: 7px;
+  font: inherit;
+  width: 100%;
+}
+
+.admin-description,
+.admin-form-actions {
+  grid-column: 1 / -1;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-save-btn,
+.admin-cancel-btn {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.admin-save-btn {
+  background: #159e9a;
+  color: white;
+}
+
+.admin-cancel-btn {
+  background: #e9eef4;
+  color: #183153;
+}
+
+.admin-message {
+  padding: 12px;
+  background: #e7f7f4;
+  color: #117f7c;
+  border-radius: 7px;
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e5eaf0;
+}
+
+.admin-table th {
+  background: #f1f5f9;
+  color: #183153;
+}
+
+.admin-table button {
+  margin: 3px;
+  padding: 7px 12px;
+  border: 1px solid #159e9a;
+  border-radius: 5px;
+  background: white;
+  color: #159e9a;
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  .admin-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -6,6 +6,7 @@ import PropertyDetails from './pages/PropertyDetails.jsx'
 import Favourites from './pages/Favourites.jsx'
 import CompareProperties from './pages/CompareProperties.jsx'
 import SmartMatch from './pages/SmartMatch.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
 
 
 function Home({
@@ -327,6 +328,7 @@ const toggleCompare = (propertyId) => {
 
   return (
     <Routes>
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route
   path="/compare"
   element={
