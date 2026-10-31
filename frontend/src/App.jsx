@@ -1,8 +1,12 @@
 
 import { useEffect, useState } from 'react'
 import './index.css'
+import { Link, Routes, Route } from 'react-router-dom'
+import PropertyDetails from './pages/PropertyDetails.jsx'
+import Favourites from './pages/Favourites.jsx'
 
-function App() {
+
+function Home({ favourites, toggleFavourite }) {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -86,10 +90,13 @@ function App() {
         <div className="logo">Prop<span>Nexa</span></div>
 
         <nav>
-          <a href="#home">Home</a>
-          <a href="#properties">Properties</a>
-          <a href="#about">About</a>
-        </nav>
+  <a href="#home">Home</a>
+  <a href="#properties">Properties</a>
+  <Link to="/favourites">
+    Favourites ({favourites.length})
+  </Link>
+  <a href="#about">About</a>
+</nav>
 
         <a href="mailto:hello@propnexa.com" className="contact-btn">
           Contact Us
@@ -186,6 +193,19 @@ function App() {
           {properties.map(property => (
             <article className="property-card" key={property.id}>
               <div className="image-wrapper">
+                <button
+  className={`favourite-btn ${
+    favourites.includes(property.id) ? 'saved' : ''
+  }`}
+  onClick={() => toggleFavourite(property.id)}
+  aria-label={
+    favourites.includes(property.id)
+      ? 'Remove from favourites'
+      : 'Add to favourites'
+  }
+>
+  {favourites.includes(property.id) ? '♥' : '♡'}
+</button>
                 <img
                   src={property.image_url}
                   alt={property.title}
@@ -216,9 +236,12 @@ function App() {
                   <span>📐 {property.area_sqft} sqft</span>
                 </div>
 
-                <button className="details-btn">
-                  View Details
-                </button>
+                <Link
+  to={`/properties/${property.id}`}
+  className="details-btn"
+>
+  View Details
+</Link>
               </div>
             </article>
           ))}
@@ -234,4 +257,52 @@ function App() {
   )
 }
 
+function App() {
+  const [favourites, setFavourites] = useState(() => {
+    return JSON.parse(localStorage.getItem('propnexa-favourites') || '[]')
+  })
+
+  useEffect(() => {
+    localStorage.setItem(
+      'propnexa-favourites',
+      JSON.stringify(favourites)
+    )
+  }, [favourites])
+
+  const toggleFavourite = (propertyId) => {
+    setFavourites(previous => {
+      if (previous.includes(propertyId)) {
+        return previous.filter(id => id !== propertyId)
+      }
+
+      return [...previous, propertyId]
+    })
+  }
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Home
+            favourites={favourites}
+            toggleFavourite={toggleFavourite}
+          />
+        }
+      />
+
+      <Route
+        path="/properties/:id"
+        element={<PropertyDetails />}
+      />
+
+      <Route
+        path="/favourites"
+        element={<Favourites favourites={favourites} toggleFavourite={toggleFavourite} />}
+      />
+    </Routes>
+  )
+}
+
 export default App
+

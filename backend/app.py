@@ -95,3 +95,11 @@ def get_properties():
         property.to_dict() for property in properties
     ])
 
+@app.route("/api/properties/<int:property_id>")
+def get_property(property_id):
+    property_item = db.session.get(Property, property_id)
+
+    if property_item is None:
+        return jsonify({"error": "Property not found"}), 404
+
+    return jsonify(property_item.to_dict())

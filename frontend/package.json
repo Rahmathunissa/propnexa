@@ -1,4 +1,3 @@
-
 {
   "name": "propnexa-frontend",
   "private": true,
@@ -11,7 +10,8 @@
   },
   "dependencies": {
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-router-dom": "^7.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "latest",
